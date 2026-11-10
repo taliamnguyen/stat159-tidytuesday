@@ -1,0 +1,26 @@
+# Question 1
+## Which country in Africa has the largest number of spoken languages?
+
+```{python}
+import pydytuesday
+import pandas as pd
+
+africa = pd.read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-13/africa.csv')
+
+africa
+```
+
+```{python}
+language_counts = (
+    africa
+    .groupby('country')['language']
+    .nunique()
+    .reset_index(name='num_languages')
+    .sort_values('num_languages', ascending=False)
+    .reset_index(drop=True)
+)
+
+language_counts.head()
+```
+
+Cameroon has the most spoken languaes with 95.
