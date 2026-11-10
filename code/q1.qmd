@@ -1,0 +1,48 @@
+# Question 1
+## Which country in Africa has the largest number of spoken languages?
+
+```{python}
+import pydytuesday
+import pandas as pd
+
+africa = pd.read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-01-13/africa.csv')
+
+africa
+```
+
+```{python}
+language_counts = (
+    africa
+    .groupby('country')['language']
+    .nunique()
+    .reset_index(name='num_languages')
+    .sort_values('num_languages', ascending=False)
+    .reset_index(drop=True)
+)
+
+language_counts.head()
+```
+
+```{python}
+import matplotlib.pyplot as plt
+
+top10 = language_counts.nlargest(10, 'num_languages', keep='all')
+
+fig, ax = plt.subplots(figsize=(8, 5))
+bars = ax.barh(top10['country'], top10['num_languages'], height=0.7)
+ax.invert_yaxis()
+ax.bar_label(bars, padding=4, fontsize=10)
+
+ax.set_title('African countries with the most spoken languages', loc='left', fontsize=13)
+ax.set_xlabel('Number of languages')
+ax.tick_params(axis='both', length=0)
+ax.xaxis.grid(True, linewidth=0.8)
+ax.set_axisbelow(True)
+for side in ['top', 'right', 'left']:
+    ax.spines[side].set_visible(False)
+
+plt.tight_layout()
+plt.show()
+```
+
+Cameroon has the most spoken languaes with 95.
